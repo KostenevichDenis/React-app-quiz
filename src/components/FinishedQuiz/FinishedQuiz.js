@@ -1,20 +1,49 @@
 import React from "react";
 import classes from './FinishedQuiz.module.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, fa, faCheckCircle, faCoffee, fas, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons"
+import Button from "../UI/Button/Button";
 
 const FinishedQuiz = props => {
-    
+    const rightAnswersCount = Object.values(props.results).filter(el => el === 'success').length
+/*     console.log('right answers: ', rightAnswersCount) */
     return (
         <div className={classes.FinishedQuiz}>
             <ul>
                 {props.quiz.map((quizItem, index) => {
-                    console.log(props.results[0])
+                    console.log('results: ', props.results)
+                    const cls = []
+                    cls.push()
+                    props.results[quizItem.id-1] === 'success' 
+                    ?
+                        (
+                            cls.push('success')
+
+                        ) 
+                    : 
+                        (
+                            cls.push('error')
+
+                        )
+                    console.log('cls: ', cls)
                     return (
-                        <li key={index} className>
+                        <li key={index}>
                             <strong>{index+1}. </strong>
-                            {quizItem.quiestion}
-                            <FontAwesomeIcon className={classes.props.results[quizItem.id]} icon={faCheck} style={{paddingLeft:5}}/>
+                            {quizItem.question}
+                            {
+                                props.results[quizItem.id-1] === 'success' 
+                                ?
+                                    (
+                                        <FontAwesomeIcon className={classes[cls[0]]} icon={faCheck} style={{paddingLeft:5}}/>
+                                        
+                                    ) 
+                                : 
+                                    (
+                                        <FontAwesomeIcon className={classes[cls[0]]} icon={faTimes} style={{paddingLeft:5}}/>
+            
+                                    )
+                            }
+                            
                         </li>
                     )
                 })}
@@ -31,10 +60,11 @@ const FinishedQuiz = props => {
                 </li> */}
             </ul>
 
-            <p>Right answers 1 from 2</p>
+            <p>Right answers {rightAnswersCount} from {props.quiz.length}</p>
 
             <div>
-                <button>Retry</button>
+                <Button onClick={props.retryHandler} type="primary">Retry</Button>
+                <Button onClick={props.retryHandler} type="success">Go to list of tests</Button>
             </div>
         </div>
     )
