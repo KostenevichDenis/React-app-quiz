@@ -3,6 +3,7 @@ import classes from './FinishedQuiz.module.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons"
 import Button from "../UI/Button/Button";
+import { Link } from "react-router-dom";
 
 const FinishedQuiz = props => {
     const rightAnswersCount = Object.values(props.results).filter(el => el === 'success').length
@@ -64,7 +65,9 @@ const FinishedQuiz = props => {
 
             <div>
                 <Button onClick={props.retryHandler} type="primary">Retry</Button>
-                <Button onClick={props.retryHandler} type="success">Go to list of tests</Button>
+                <Link to={'/'}>
+                    <Button onClick={props.retryHandler} type="success">Go to list of tests</Button>
+                </Link>
             </div>
         </div>
     )
