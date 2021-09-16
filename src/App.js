@@ -1,13 +1,24 @@
-import Layout from './hoc/Layout/Layout'
+import { Route, Switch } from 'react-router';
+import Quiz from './containers/Quiz/Quiz';
+import Layout from './hoc/Layout/Layout';
+import Auth from './containers/Auth/Auth';
+import QuizCreator from './containers/QuizCreator/QuizCreator'
+import QuizList from './containers/QuizList/QuizList'
+
 
 function App() {
   return (
     <Layout>
+      <Switch>
+        <Route path={'/auth'} component={Auth} />
+        <Route path={'/quiz-crator'} component={QuizCreator} />
+        <Route path={'/quiz/:id'} component={Quiz} />
+        <Route path={'/'} component={QuizList} />
+      </Switch>
+
+    
 
 
-      <div style={{width: '400px', border: '1px solid black'}}>
-        <h1>Layout works perfect</h1>
-      </div>
     </Layout>
   );
 }
