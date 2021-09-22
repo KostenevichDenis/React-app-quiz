@@ -5,7 +5,7 @@ import classes from "./QuizCreator.module.css";
 import { createControl, validateControl } from "../../form/formFramework";
 import { Fragment } from "react/cjs/react.production.min";
 import Select from "../../components/UI/Select/Select";
-import axios from "axios";
+import axios from "../../axios/axios-quiz";
 
 const createFormControls = () => {
   return {
@@ -60,7 +60,7 @@ export default class QuizCreator extends Component {
   state = {
     quiz: [],
     formControls: createFormControls(),
-    rigthAnswerId: 1,
+    rightAnswerId: 1,
     isFormValid: false,
   };
 
@@ -73,11 +73,11 @@ export default class QuizCreator extends Component {
     console.log(this.state.quiz);
 
     try {
-      const response = await axios.post('https://react-quiz-cba87-default-rtdb.europe-west1.firebasedatabase.app/quiz.json', this.state.quiz)
+      const response = await axios.post('quiz.json', this.state.quiz)
       this.setState({
         quiz: [],
         formControls: createFormControls(),
-        rigthAnswerId: 1,
+        rightAnswerId: 1,
         isFormValid: false
       })
       console.log(response.data)
@@ -117,7 +117,7 @@ export default class QuizCreator extends Component {
 
   SelectChangeHandler = (event) => {
     this.setState({
-      rigthAnswerId: +event.target.value,
+      rightAnswerId: +event.target.value,
     });
   };
 
@@ -131,12 +131,12 @@ export default class QuizCreator extends Component {
     const quizInput = {
       id: index,
       question: formData.question.value,
-      rigthAnswerId: this.state.rigthAnswerId,
+      rightAnswerId: this.state.rightAnswerId,
       answers: [
-        { option1: formData.option1.value },
-        { option2: formData.option2.value },
-        { option3: formData.option3.value },
-        { option4: formData.option4.value },
+        { text: formData.option1.value, id: formData.option1.id },
+        { text: formData.option2.value, id: formData.option2.id },
+        { text: formData.option3.value, id: formData.option3.id },
+        { text: formData.option4.value, id: formData.option4.id }
       ],
     };
     quiz.push(quizInput);
@@ -144,7 +144,7 @@ export default class QuizCreator extends Component {
     this.setState({
       quiz,
       formControls: createFormControls(),
-      rigthAnswerId: 1,
+      rightAnswerId: 1,
       isFormValid: false,
     });
     /* console.log("quizInput state: ", quizInput)   */
@@ -181,7 +181,7 @@ export default class QuizCreator extends Component {
           <form onSubmit={this.submitHandler}>
             {this.renderInputs()}
             <Select
-              value={this.state.rigthAnswerId}
+              value={this.state.rightAnswerId}
               onChange={this.SelectChangeHandler}
               label="Choose correct answer"
               text=""

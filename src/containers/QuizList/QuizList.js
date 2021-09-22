@@ -1,59 +1,53 @@
-import React, { Component } from 'react'
-import { NavLink } from 'react-router-dom'
-import classes from './QuizList.module.css'
-import axios from 'axios'
+import React, { Component } from "react";
+import { NavLink } from "react-router-dom";
+import classes from "./QuizList.module.css";
+import Loader from "../../components/UI/Loader/Loader";
+import { connect } from "react-redux";
+import { fetchQuizes } from "../../store/actions/quizActions";
 
-export default class QuizList extends Component {
+class QuizList extends Component {
+  renderQuizes() {
+    return this.props.quizes.map((quiz) => {
+      return (
+        <li key={quiz.id}>
+          <NavLink to={"/quiz/" + quiz.id}>{quiz.name}</NavLink>
+        </li>
+      );
+    });
+  }
 
-    state = {
-        quizes: []
-    }
+  componentDidMount() {
+    this.props.fetchQuizes();
+  }
 
-    renderQuizes () {
-        return this.state.quizes.map(quiz => {
-            return (
-                <li key={quiz.id}>
-                    <NavLink
-                        to={'/quiz/'+ quiz.id}>
-                        {quiz.name}
-                    </NavLink>
-                </li>
-            )
-        })
-    }
+  render() {
+    return (
+      <div className={classes.gridContainer}>
+        <div className={classes.QuizList}>
+          <h1>List of Quizes</h1>
 
-    componentDidMount = async () => {
-        try {
-            const quizes = []
-            const response = await axios.get('https://react-quiz-cba87-default-rtdb.europe-west1.firebasedatabase.app/quiz.json')
-            Object.keys(response.data).forEach((key, index) => {
-                quizes.push({
-                    id: key,
-                    name: `Quiz #${index + 1}`
-                })
-            })
-            this.setState({
-                quizes
-            })
-            console.log(response.data)
-        } catch (error) {
-            console.log(error)
-        }
-        
-
-    }
-
-    render() {
-        return (
-            <div className={classes.gridContainer}>
-                <div className={classes.QuizList}>
-                    <h1>List of Quizes</h1>
-
-                    <ul>
-                        {this.renderQuizes()}
-                    </ul>
-                </div>
-            </div>
-        )
-    }
+          {this.props.loading && this.props.quizes.length !== 0 ? (
+            <Loader />
+          ) : (
+            <ul>{this.renderQuizes()}</ul>
+          )}
+        </div>
+      </div>
+    );
+  }
 }
+
+function mapStateToProps(state) {
+  return {
+    quizes: state.quiz.quizes,
+    loading: state.quiz.loading,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchQuizes: () => dispatch(fetchQuizes()),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(QuizList);
