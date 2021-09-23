@@ -94,6 +94,10 @@ class Quiz extends Component {
         } */
     }
 
+    componentWillUnmount = async () => {
+        this.props.retryHandler()
+    }
+
     render() {
         return (
             <div className={classes.Quiz}>

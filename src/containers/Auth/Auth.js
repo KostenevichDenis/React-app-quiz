@@ -3,8 +3,9 @@ import classes from "./Auth.module.css";
 import Button from "../../components/UI/Button/Button";
 import Input from "../../components/UI/Input/Input";
 import { validateControl } from "../../form/formFramework";
-import axios from "axios";
-export default class Auth extends Component {
+import { connect } from "react-redux";
+import { auth } from "../../store/actions/authActions";
+class Auth extends Component {
   state = {
     isFormValid: false,
     formControls: {
@@ -76,8 +77,9 @@ export default class Auth extends Component {
     });
   }
 
-  loginHandler = async () => {
-    try {
+  loginHandler = () => {
+    this.props.auth(this.state.formControls.email.value, this.state.formControls.password.value, true)
+    /* try {
       const authData = {
         email: this.state.formControls.email.value,
         password: this.state.formControls.password.value,
@@ -90,11 +92,12 @@ export default class Auth extends Component {
       console.log(response.data);
     } catch (e) {
       console.log(e);
-    }
+    } */
   };
 
-  registerHandler = async () => {
-    try {
+  registerHandler = () => {
+    this.props.auth(this.state.formControls.email.value, this.state.formControls.password.value, false)
+    /* try {
       const authData = {
         email: this.state.formControls.email.value,
         password: this.state.formControls.password.value,
@@ -107,7 +110,7 @@ export default class Auth extends Component {
       console.log(response.data);
     } catch (e) {
       console.log(e);
-    }
+    } */
   };
 
   submitHandler = (event) => {
@@ -146,3 +149,17 @@ export default class Auth extends Component {
     );
   }
 }
+
+/* function mapStateToProps(state) {
+  return {
+
+  };
+} */
+
+function mapDispatchToProps(dispatch) {
+  return {
+    auth: (email, password, isLogin) => dispatch(auth(email, password, isLogin))
+  };
+}
+
+export default connect(null, mapDispatchToProps)(Auth);
