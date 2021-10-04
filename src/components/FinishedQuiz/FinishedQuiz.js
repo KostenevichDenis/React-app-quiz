@@ -12,7 +12,7 @@ const FinishedQuiz = props => {
         <div className={classes.FinishedQuiz}>
             <ul>
                 {props.quiz.map((quizItem, index) => {
-                    console.log('results: ', props.results)
+                    /* console.log('results: ', props.results) */
                     const cls = []
                     cls.push()
                     props.results[quizItem.id-1] === 'success' 
@@ -26,7 +26,7 @@ const FinishedQuiz = props => {
                             cls.push('error')
 
                         )
-                    console.log('cls: ', cls)
+                    /* console.log('cls: ', cls) */
                     return (
                         <li key={index}>
                             <strong>{index+1}. </strong>

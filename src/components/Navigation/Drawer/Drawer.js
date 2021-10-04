@@ -2,8 +2,23 @@ import React, { Component } from "react";
 import classes from "./Drawer.module.css"
 import Backdrop from "../../UI/Backdrop/Backdrop";
 import { NavLink } from "react-router-dom";
+import LogoutButton from "../../UI/LogoutButton/LogoutButton";
+
 
 const links = [
+    {
+        to: '/auth',
+        label: 'Authentication',
+        exact: false
+    },
+    {
+        to: '/',
+        label: 'Quiz List',
+        exact: true
+    }, 
+]
+
+const authedLinks = [
     {
         to: '/',
         label: 'Quiz List',
@@ -13,19 +28,17 @@ const links = [
         to: '/quiz-crator',
         label: 'Create Quiz',
         exact: false
-    }, 
-    {
-        to: '/auth',
-        label: 'Authentication',
-        exact: false
     }
 ]
 
 class Drawer extends Component {
 
     renderLinks() {
+        let linksToRender
+        this.props.isAuth ? linksToRender = authedLinks : linksToRender = links
         return (
-            links.map( (link, index) => {
+            linksToRender.map( (link, index) => {
+                /* console.log(this.props.isAuth) */
                 return (
                     <li key={index}>
                         <NavLink
@@ -38,7 +51,7 @@ class Drawer extends Component {
                         </NavLink>
                     </li>
                 )
-            } )
+            })
         )
     }
 
@@ -56,7 +69,10 @@ class Drawer extends Component {
                     <ul>
                         {this.renderLinks()}
                     </ul>
-
+                    {
+                        this.props.isAuth ? <LogoutButton isAuth={this.props.isAuth} /> : null
+                    }
+                    
                 </nav>
             </React.Fragment>
         )
